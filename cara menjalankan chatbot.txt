@@ -1,0 +1,6 @@
+CARA MENJALANKAN PROGRAM
+
+1. Simpan Code app.py chatbot.py folder templates/html, dan informatika.json
+2. Jika sudah, buka vscode buka folder yang berisi code diatas
+3. Buka terminal, ketik python app.py untuk menjalankan aplikasi flask. Setelah aplikasi dimulai, Anda akan melihat output yang menyatakan bahwa server sedang berjalan di alamat http://127.0.0.1:5000, yang merupakan localhost (komputer lokal Anda) 
+4. setelah itu masukan alamat http://127.0.0.1:5000 di browser, maka tampilan web dari InfoBotika akan muncul dan komunikasi dengan bot dapat dimulai.
