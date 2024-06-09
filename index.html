@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    .navbar {
+      background-color: #001146;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .navbar nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0 15px;
+      transition: color 0.3s;
+    }
+    .navbar nav a:hover {
+      color: #001146;
+    }
+    h2 {
+      margin-top: 80px; /* Sesuaikan dengan tinggi navbar */
+      text-align: center;
+      color: #323232;
+    }
+    #chatbox {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #chatlogs {
+      width: 80%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      height: 300px;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+    #userInput {
+      width: calc(80% - 80px);
+      max-width: 600px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    #userInput:focus {
+      border-color: #6200ea;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      background-color: #001146;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    button:hover {
+      background-color: #001146;
+      transform: scale(1.05);
+    }
+    .footer {
+      background-color: #001146;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .user-message, .bot-message {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    .user-message {
+      background-color: #e1bee7;
+      align-self: flex-end;
+      animation: fadeInRight 0.5s;
+    }
+    .bot-message {
+      background-color: #bbdefb;
+      align-self: flex-start;
+      animation: fadeInLeft 0.5s;
+    }
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">InfoBotika</div>
+    <nav>
+      <!-- Add navigation links here if needed -->
+    </nav>
+  </div>
+
+  <h2>Tanya Bot Sekarang juga</h2>
+  <div id="chatbox">
+    <div id="chatlogs"></div>
+    <input type="text" id="userInput" placeholder="Tanyakan sesuatu..." />
+    <button onclick="sendMessage()">Kirim</button>
+  </div>
+
+  <br><br>
+  <div class="footer">&copy; 2024 InfoBotika By Pandapotan.</div>
+
+  <script>
+    function sendMessage() {
+      var userInput = $("#userInput").val();
+      if (userInput.trim() !== "") {
+        $("#chatlogs").append("<div class='user-message'><b>Anda:</b> " + userInput + "</div>");
+        $("#userInput").val("");
+        $("#chatlogs").animate({ scrollTop: $('#chatlogs')[0].scrollHeight }, "slow");
+        setTimeout(function() {
+          $("#chatlogs").append("<div class='bot-message'><b>Bot:</b> Menunggu respons...</div>");
+          $("#chatlogs").animate({ scrollTop: $('#chatlogs')[0].scrollHeight }, "slow");
+          $.post("/get_response", { question: userInput }, function (data) {
+            $(".bot-message").last().html("<b>Bot:</b> " + data.response);
+            $("#chatlogs").animate({ scrollTop: $('#chatlogs')[0].scrollHeight }, "slow");
+          });
+        }, 1000); // Menambahkan timeout untuk simulasi waktu respons bot
+      }
+    }
+  </script>
+</body>
+</html>
